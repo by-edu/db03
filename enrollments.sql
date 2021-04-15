@@ -49,7 +49,7 @@ CREATE TRIGGER enroll_student
 	UPDATE courses
 		SET actual=(actual+1)
 		WHERE code=NEW.code;
-   
+    
 END$$   
 
 -- TODO: create a trigger name drop_student that automatically decrements the actual field in courses whenever a student drops from a course
@@ -63,11 +63,21 @@ CREATE TRIGGER drop_student
 	UPDATE courses
 		SET actual=(actual-1)
 		WHERE code=OLD.code;
-   
+    
 END$$    
         
 -- TODO: create a stored procedure name list_students that returns a list of ids and names of all students currently enrolled in a given course 
     
-CREATE USER 'enrollments' IDENTIFIED BY '135791';
+CREATE USER 'enrollments'@'localhost' IDENTIFIED BY '135791';
 GRANT ALL ON enrollments.* TO 'enrollments';
 
+DROP PROCEDURE IF EXISTS list_students;
+
+DELIMITER $$
+CREATE PROCEDURE list_students(IN course VARCHAR(7))
+BEGIN
+	Select * FROM students
+		WHERE id IN 
+        (Select id from enrollments where course=code);
+
+END$$
