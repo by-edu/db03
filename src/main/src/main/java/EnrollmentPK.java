@@ -7,11 +7,14 @@
 
 import java.io.Serializable;
 import javax.persistence.Embeddable;
+import javax.persistence.Id;
 
 @Embeddable
 public class EnrollmentPK implements Serializable {
 
+    @Id
     private String code;
+    @Id
     private int id;
 
     public String getCode(){return code;}

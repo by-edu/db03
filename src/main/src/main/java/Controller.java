@@ -11,6 +11,7 @@ import org.hibernate.internal.SessionImpl;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.sql.*;
 import java.util.List;
 
 public class Controller {
@@ -27,19 +28,21 @@ public class Controller {
     // TODO: return a Student entity from the given id (or null if the entity does not exist)
     public Student getStudent(int id) {
 
-        // new Student();
-        Student testStudent = new Student();
 
-        if(getStudent(id) != null){
+        String stdntString;
+        Student student = new Student();
 
-            // student = something here, then return it
+        if(student.getId() != 0){
 
-            System.out.println("This one worked!!!!!!!!!!");
-            return testStudent;
+            stdntString = student.toString();
+
+            System.out.println(stdntString + " This is the 'toString' method.");
+
+            return student;
 
         }
 
-        System.out.println("I don't think this one worked!!!!!!!!!!");
+        System.out.println("Student is empty.");
         return null;
 
     }
@@ -47,21 +50,41 @@ public class Controller {
     // TODO: add the given student entity, returning true/false depending whether the operation was successful or not
     public boolean addStudent(final Student student) {
 
+        boolean flag;
+        int id = 0;
+        String stdntString;
+        student.setId(id);
+        System.out.println(id);
+            // Just to check
+        stdntString = student.toString();
 
-        boolean flag = true;
 
-        if (false){
+        
+
+        id = student.getId();
+
+        //student.add();
+
+
+        // Below should be for when it's added or not
+        if (getStudent().getId()){
             // this is used to check if student successfully was added
-            return false;
+            flag = true;
+            return flag;
+        } else{
+            flag = false;
         }
-
-        // student.add();
 
         return flag;
     }
 
     // TODO: return a list of all Course entities
     public List<Course> getCourses() {
+
+
+
+
+
         return null;
     }
 
@@ -78,8 +101,10 @@ public class Controller {
     // TODO: return a list of all Student entities enrolled in the given course (hint: use the stored procedure 'list_students')
     public List<Student> getStudentsEnrolled(String course) {
 
-        /* SessionImpl sessionImpl = (SessionImpl) session;
-        Connection conn = sessionImpl.connection(); */
+        SessionImpl sessionImpl = (SessionImpl) session;
+        Connection conn = sessionImpl.connection();
+
+
         return null;
     }
 }

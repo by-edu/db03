@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Table(name = "courses")
 public class Course {
 
-
+        @Id
         private String code;
 
         private String title;
