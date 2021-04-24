@@ -54,7 +54,7 @@
              ResultSet rs= stmt.executeQuery("Select Max(id) From students");
              int currmaxid= 0;
              while(rs.next())
-                 currmaxid= rs.getInt();
+                 currmaxid= rs.getInt(currmaxid);
              PreparedStatement ps= conn.prepareStatement("Insert into students(id, name) values (?,?)");
              ps.setInt(1,currmaxid+1);
              ps.setString(2,student.getName());
@@ -69,23 +69,52 @@
              return false;
          }
 
-         // this is used to check if student successfully was added
+         return true;
 
      }
 
      // TODO: return a list of all Course entities
      public List<Course> getCourses() {
-         return null;
+         List<Course> courses = session.createQuery("FROM Course").getResultList();
+        return courses;
      }
 
      // TODO: enroll a student to a course based on the given parameters, returning true/false depending whether the operation was successful or not
      public boolean enrollStudent(String code, int id) {
-         return false;
+         try{
+           session.beginTransaction();
+           Enrollment enroll = new Enrollment();
+           
+           enroll.setCode(code);
+           enroll.setId(id);
+           session.save(enroll);
+           session.getTransaction().commit();
+           session.evict(enroll);
+           session.clear();
+         } catch (Exception e) {
+            
+           e.printStackTrace();
+           return false;
+         }
+        return true;
      }
 
      // TODO: drop a student from a course based on the given parameters, returning true/false depending whether the operation was successful or not
      public boolean dropStudent(String code, int id) {
+         
+       try {
+         Transaction transaction = session.beginTransaction();
+         String stmt = ("DELETE FROM Enrollment WHERE code= :code AND id= :id");
+         Query query = session.createQuery(stmt);
+         query.setParameter("code", code);
+         query.setParameter("id", id);
+         query.executeUpdate();
+         transaction.commit();
+       } catch (Exception e){
+         e.printStackTrace();
          return false;
+       }
+      return true;
      }
 
      // TODO: return a list of all Student entities enrolled in the given course (hint: use the stored procedure 'list_students')
